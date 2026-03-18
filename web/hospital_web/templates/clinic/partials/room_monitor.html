@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      <th>Кабинет</th>
+      <th>Статус сейчас</th>
+      <th>Ближайшая запись</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in lines %}
+      <tr>
+        <td><strong>{{ line.room_name }}</strong></td>
+        <td>
+          {% if line.is_busy_now %}
+            <span class="pill bad">занят до {{ line.busy_until }}</span>
+            <span class="muted">— {{ line.current_doctor_name }}</span>
+          {% else %}
+            <span class="pill good">свободен</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if line.upcoming_time %}
+            <span class="pill">{{ line.upcoming_time }}</span>
+            <span class="muted">— {{ line.upcoming_doctor_name }}</span>
+          {% else %}
+            <span class="muted">нет</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Записи{% endblock %}
+{% block content %}
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0 0 6px;">Записи</h2>
+        <div class="muted">
+          {% if doctor %}Мои записи: {{ doctor.name }}{% else %}Все записи (нет профиля врача у пользователя){% endif %}
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="btn" href="{% url 'appointment_create' %}">Создать запись</a>
+        <a class="btn" href="{% url 'calendar_month' %}">Календарь</a>
+        <a class="btn" href="{% url 'day_view' %}">День</a>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Кабинет</th>
+            <th>Пациент</th>
+            <th>Врач</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in appointments %}
+            <tr>
+              <td>{{ a.appointment_date }}</td>
+              <td>{{ a.appointment_time|time:"H:i" }} ({{ a.duration_minutes }} мин)</td>
+              <td>{{ a.room.name }}</td>
+              <td>{{ a.patient.name }} <span class="muted">({{ a.patient.phone }})</span></td>
+              <td>{{ a.doctor.name }}</td>
+              <td><span class="pill">{{ a.status }}</span></td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="6" class="muted">Пока нет записей</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+

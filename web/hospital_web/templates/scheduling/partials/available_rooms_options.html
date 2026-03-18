@@ -1,0 +1,6 @@
+{% for r in rooms %}
+  <option value="{{ r.id }}">{{ r.name }}</option>
+{% empty %}
+  <option value="">Нет доступных кабинетов</option>
+{% endfor %}
+

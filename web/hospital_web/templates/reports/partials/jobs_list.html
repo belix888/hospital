@@ -1,0 +1,42 @@
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Тип</th>
+      <th>Статус</th>
+      <th>Параметры</th>
+      <th>Создан</th>
+      <th>Готов</th>
+      <th>Файл</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for j in jobs %}
+      <tr>
+        <td>{{ j.id }}</td>
+        <td>{{ j.get_kind_display }}</td>
+        <td>
+          <span class="pill {% if j.status == 'done' %}good{% elif j.status == 'failed' %}bad{% endif %}">
+            {{ j.get_status_display }}
+          </span>
+          {% if j.status == 'failed' and j.error %}
+            <div class="error">{{ j.error }}</div>
+          {% endif %}
+        </td>
+        <td class="muted">{{ j.params }}</td>
+        <td class="muted">{{ j.created_at|date:"Y-m-d H:i" }}</td>
+        <td class="muted">{% if j.finished_at %}{{ j.finished_at|date:"Y-m-d H:i" }}{% else %}—{% endif %}</td>
+        <td>
+          {% if j.file %}
+            <a class="btn secondary" href="{{ j.file.url }}" target="_blank" rel="noopener">Скачать</a>
+          {% else %}
+            <span class="muted">—</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7" class="muted">Отчётов пока нет</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+

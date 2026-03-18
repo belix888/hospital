@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Отчёты{% endblock %}
+{% block content %}
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0 0 6px;">Отчёты (Excel)</h2>
+        <div class="muted">Отчёт формируется сразу и начнёт скачиваться автоматически.</div>
+      </div>
+    </div>
+
+    <form
+      method="post"
+      action="{% url 'reports_create' %}"
+      style="margin-top:14px;"
+    >
+      {% csrf_token %}
+      <div class="grid">
+        <div class="col-6">
+          <label>Год</label>
+          <input type="number" name="year" value="{{ default_year }}" min="2000" max="2100">
+        </div>
+        <div class="col-6">
+          <label>Месяц</label>
+          <input type="number" name="month" value="{{ default_month }}" min="1" max="12">
+        </div>
+        <div class="col-12">
+          <label>Тип отчёта</label>
+          <select name="kind">
+            <option value="doctor_month">Мои записи за месяц</option>
+            {% if is_staff %}
+              <option value="all_doctors_month">Все врачи за месяц (общий)</option>
+            {% endif %}
+          </select>
+          <div class="help">Администратор может сформировать общий отчёт по всем врачам.</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn" type="submit">Сформировать отчёт</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}
+

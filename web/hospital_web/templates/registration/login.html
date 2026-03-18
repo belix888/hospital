@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:520px;margin:0 auto;">
+    <h2 style="margin:0 0 10px;">Вход</h2>
+    <p class="muted" style="margin-top:0;">Используйте учётную запись, созданную администратором.</p>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <label for="id_username">Логин</label>
+      {{ form.username }}
+      <label for="id_password">Пароль</label>
+      {{ form.password }}
+      <div style="margin-top:14px;display:flex;gap:10px;align-items:center;">
+        <button class="btn" type="submit">Войти</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+

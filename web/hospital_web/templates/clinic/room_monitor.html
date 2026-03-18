@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Мониторинг кабинетов{% endblock %}
+{% block content %}
+  <div class="card">
+    <h2 style="margin:0 0 10px;">Мониторинг кабинетов</h2>
+    <div class="muted" style="margin-bottom:12px;">Дата: {{ date_str }}</div>
+    <div
+      hx-get="{% url 'room_monitor' %}?date={{ date_str }}"
+      hx-trigger="load, every 30s"
+      hx-swap="innerHTML"
+    >
+      {% include "clinic/partials/room_monitor.html" %}
+    </div>
+  </div>
+{% endblock %}
+

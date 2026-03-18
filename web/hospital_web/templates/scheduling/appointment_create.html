@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Создать запись{% endblock %}
+{% block content %}
+  <div class="card" style="max-width:860px;margin:0 auto;">
+    <div class="form-head">
+      <div>
+        <h2 class="form-title">Создать запись</h2>
+        <div class="muted form-subtitle">Заполните дату/время — кабинет подберётся автоматически.</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn secondary" href="{% url 'my_appointments' %}">К списку</a>
+      </div>
+    </div>
+    <form method="post">
+      {% csrf_token %}
+
+      {{ form.non_field_errors }}
+      {% if form.doctor.is_hidden %}
+        {{ form.doctor }}
+      {% else %}
+        <label>Врач</label>
+        {{ form.doctor }}
+        {% if form.doctor.errors %}<div class="error">{{ form.doctor.errors }}</div>{% endif %}
+      {% endif %}
+
+      <div id="patient-field">
+        {% include "scheduling/partials/patient_field.html" with patients=patients selected_patient_id=form.data.patient %}
+      </div>
+      {% if form.patient.errors %}<div class="error">{{ form.patient.errors }}</div>{% endif %}
+
+      <div class="grid" style="margin-top:8px;">
+        <div class="col-6">
+          <label>Дата</label>
+          {{ form.appointment_date }}
+          {% if form.appointment_date.errors %}<div class="error">{{ form.appointment_date.errors }}</div>{% endif %}
+        </div>
+        <div class="col-6">
+          <label>Время</label>
+          {{ form.appointment_time }}
+          {% if form.appointment_time.errors %}<div class="error">{{ form.appointment_time.errors }}</div>{% endif %}
+        </div>
+        <div class="col-6">
+          <label>Длительность (мин)</label>
+          {{ form.duration_minutes }}
+          <div class="help">Например: 30, 60, 90, 120.</div>
+          {% if form.duration_minutes.errors %}<div class="error">{{ form.duration_minutes.errors }}</div>{% endif %}
+        </div>
+        <div class="col-6">
+          <label>Кабинет</label>
+          <select
+            name="{{ form.room.name }}"
+            id="id_room"
+            hx-get="{% url 'available_rooms_partial' %}"
+            hx-trigger="load, change from:#id_appointment_date, change from:#id_appointment_time, change from:#id_duration_minutes"
+            hx-include="#id_appointment_date,#id_appointment_time,#id_duration_minutes"
+            hx-target="#id_room"
+            hx-swap="innerHTML"
+          >
+            {% include "scheduling/partials/available_rooms_options.html" with rooms=form.fields.room.queryset %}
+          </select>
+          <div class="help">Если кабинетов нет — измените время или длительность.</div>
+          {% if form.room.errors %}<div class="error">{{ form.room.errors }}</div>{% endif %}
+        </div>
+      </div>
+
+      <label>Заметки</label>
+      {{ form.notes }}
+      <div class="help">Можно указать комментарии, пожелания или детали приёма.</div>
+      {% if form.notes.errors %}<div class="error">{{ form.notes.errors }}</div>{% endif %}
+
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn" type="submit">Сохранить</button>
+        <a class="btn secondary" href="{% url 'my_appointments' %}">Отмена</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+

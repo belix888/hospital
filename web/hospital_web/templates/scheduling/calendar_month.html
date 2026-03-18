@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Календарь{% endblock %}
+{% block content %}
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0 0 6px;">Календарь записей</h2>
+        <div class="muted">{{ month }}.{{ year }}</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <a class="btn" href="{% url 'calendar_month' %}?year={{ prev_year }}&month={{ prev_month }}">◀</a>
+        <a class="btn" href="{% url 'calendar_month' %}">Сегодня</a>
+        <a class="btn" href="{% url 'calendar_month' %}?year={{ next_year }}&month={{ next_month }}">▶</a>
+      </div>
+    </div>
+
+    <style>
+      .cal { width: 100%; border-collapse: separate; border-spacing: 8px; margin-top: 10px; }
+      .cal th { color: var(--muted); font-weight: 600; padding: 6px 4px; }
+      .cal td { vertical-align: top; }
+      .day {
+        display:block;
+        padding: 10px 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.12);
+        background: rgba(0,0,0,.18);
+        color: var(--text);
+        min-height: 44px;
+      }
+      .day:hover { border-color: rgba(110,231,255,.35); background: rgba(110,231,255,.08); }
+      .day.today { border-color: rgba(110,231,255,.55); }
+      .day.has { box-shadow: inset 0 0 0 1px rgba(56,217,169,.25); }
+      .dot { display:inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--good); margin-left: 8px; transform: translateY(-1px); }
+      .empty { opacity: .0; }
+    </style>
+
+    <table class="cal">
+      <thead>
+        <tr>
+          <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for week in weeks %}
+          <tr>
+            {% for cell in week %}
+              <td>
+                {% if cell.day %}
+                  <a
+                    class="day {% if cell.is_today %}today{% endif %} {% if cell.has_appointments %}has{% endif %}"
+                    href="{% url 'day_view' %}?date={{ cell.date_str }}"
+                    title="Открыть день"
+                  >
+                    <strong>{{ cell.day }}</strong>
+                    {% if cell.has_appointments %}<span class="dot"></span>{% endif %}
+                  </a>
+                {% else %}
+                  <span class="day empty">&nbsp;</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+

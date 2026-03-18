@@ -1,0 +1,40 @@
+<div class="card" style="margin-top:10px; padding:14px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+    <div>
+      <strong>Новый пациент</strong>
+      <div class="help">Добавится сразу в список и выберется автоматически.</div>
+    </div>
+    <button type="button" class="btn secondary" hx-target="#patient-quick-add" hx-swap="innerHTML" hx-get="{% url 'patient_quick_add' %}?close=1">Закрыть</button>
+  </div>
+
+  <form
+    hx-post="{% url 'patient_quick_add' %}"
+    hx-target="#patient-field"
+    hx-swap="outerHTML"
+    style="margin-top:10px;"
+  >
+    {% csrf_token %}
+    <div class="grid">
+      <div class="col-12">
+        <label>ФИО</label>
+        {{ pform.name }}
+        {% if pform.name.errors %}<div class="error">{{ pform.name.errors }}</div>{% endif %}
+      </div>
+      <div class="col-6">
+        <label>Телефон</label>
+        {{ pform.phone }}
+        {% if pform.phone.errors %}<div class="error">{{ pform.phone.errors }}</div>{% endif %}
+      </div>
+      <div class="col-6">
+        <label>Дата рождения</label>
+        {{ pform.birth_date }}
+        {% if pform.birth_date.errors %}<div class="error">{{ pform.birth_date.errors }}</div>{% endif %}
+      </div>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button type="submit" class="btn">Добавить пациента</button>
+      <button type="button" class="btn secondary" hx-target="#patient-quick-add" hx-swap="innerHTML" hx-get="{% url 'patient_quick_add' %}?close=1">Отмена</button>
+    </div>
+  </form>
+</div>
+

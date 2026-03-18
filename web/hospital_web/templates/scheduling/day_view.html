@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}День{% endblock %}
+{% block content %}
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0 0 6px;">День: {{ date_str }}</h2>
+        <div class="muted">Все записи со статусом scheduled на выбранную дату.</div>
+      </div>
+      <form method="get" action="" style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;">
+        <div>
+          <label>Дата</label>
+          <input type="date" name="date" value="{{ date_str }}" />
+        </div>
+        <button class="btn" type="submit">Показать</button>
+      </form>
+    </div>
+
+    <div style="margin-top:14px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Кабинет</th>
+            <th>Время</th>
+            <th>Врач</th>
+            <th>Пациент</th>
+            <th>Заметки</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in appointments %}
+            <tr>
+              <td><strong>{{ a.room.name }}</strong></td>
+              <td>{{ a.appointment_time|time:"H:i" }} ({{ a.duration_minutes }} мин)</td>
+              <td>{{ a.doctor.name }}</td>
+              <td>{{ a.patient.name }} <span class="muted">({{ a.patient.phone }})</span></td>
+              <td class="muted">{{ a.notes }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="5" class="muted">Записей нет</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+

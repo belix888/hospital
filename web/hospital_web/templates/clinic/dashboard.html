@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+  <div class="grid">
+    <div class="card col-12">
+      <h2 style="margin:0 0 8px;">Панель</h2>
+      <div class="muted">MVP: мониторинг кабинетов, админка и API. Дальше добавим календарь и создание записей.</div>
+    </div>
+    <div class="card col-6">
+      <h3 style="margin:0 0 10px;">Быстрые действия</h3>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        {% if request.user.is_staff or request.user.is_superuser %}
+          <a class="btn" href="/admin/">Админ-панель</a>
+        {% endif %}
+        <a class="btn" href="{% url 'room_monitor' %}">Мониторинг кабинетов</a>
+      </div>
+    </div>
+    <div class="card col-6">
+      <h3 style="margin:0 0 10px;">Подсказка</h3>
+      <div class="muted">Для старта создайте кабинеты и врачей в Admin, затем записи. Мониторинг покажет «занят/свободен сейчас».</div>
+    </div>
+  </div>
+{% endblock %}
+

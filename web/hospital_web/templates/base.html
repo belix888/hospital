@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}Hospital Scheduler{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org@2.0.7"></script>
+    <style>
+      :root {
+        --bg:#0b1020;
+        --card:#121a33;
+        --text:#e9ecf5;
+        --muted:#aab3d6;
+        --accent:#6ee7ff;
+        --bad:#ff6b6b;
+        --good:#38d9a9;
+        --ring: rgba(110,231,255,.40);
+        --stroke: rgba(110,231,255,.18);
+        --stroke2: rgba(255,255,255,.14);
+      }
+      body {
+        margin:0;
+        font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+        background:
+          radial-gradient(900px 500px at 20% 10%, rgba(110,231,255,.12), transparent 55%),
+          radial-gradient(900px 500px at 80% 0%, rgba(56,217,169,.09), transparent 50%),
+          linear-gradient(120deg, #070a14, var(--bg));
+        color: var(--text);
+      }
+      a { color: var(--accent); text-decoration: none; }
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      .top { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom: 18px; }
+      .brand { font-weight: 700; letter-spacing: .4px; }
+      .nav { display:flex; gap:12px; align-items:center; }
+      .card {
+        background:
+          linear-gradient(180deg, rgba(18,26,51,.92), rgba(18,26,51,.72));
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow:
+          0 20px 60px rgba(0,0,0,.35),
+          inset 0 1px 0 rgba(255,255,255,.06);
+        backdrop-filter: blur(8px);
+      }
+      .grid { display:grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+      .col-6 { grid-column: span 6; }
+      .col-12 { grid-column: span 12; }
+      .btn {
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(110,231,255,.22);
+        background: linear-gradient(180deg, rgba(110,231,255,.11), rgba(110,231,255,.06));
+        color: var(--text);
+        cursor: pointer;
+        transition: transform .06s ease, background .12s ease, border-color .12s ease;
+        user-select: none;
+      }
+      .btn:hover { background: linear-gradient(180deg, rgba(110,231,255,.16), rgba(110,231,255,.08)); border-color: rgba(110,231,255,.34); }
+      .btn:active { transform: translateY(1px); }
+      .btn.secondary { border-color: rgba(255,255,255,.16); background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)); }
+      .btn.secondary:hover { border-color: rgba(255,255,255,.22); background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05)); }
+      .muted { color: var(--muted); }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,.08); text-align:left; }
+      .pill { display:inline-block; padding: 3px 8px; border-radius: 999px; font-size: 12px; border: 1px solid rgba(255,255,255,.16); }
+      .pill.good { border-color: rgba(56,217,169,.4); color: var(--good); }
+      .pill.bad { border-color: rgba(255,107,107,.45); color: var(--bad); }
+      input, select, textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke2);
+        background: rgba(0,0,0,.22);
+        color: var(--text);
+        outline: none;
+        transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
+      }
+      select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, rgba(233,236,245,.7) 50%), linear-gradient(135deg, rgba(233,236,245,.7) 50%, transparent 50%); background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px); background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 34px; }
+      textarea { resize: vertical; min-height: 92px; }
+      input:focus, select:focus, textarea:focus { border-color: rgba(110,231,255,.55); box-shadow: 0 0 0 4px var(--ring); background: rgba(0,0,0,.28); }
+      label { display:block; margin: 10px 0 6px; color: var(--muted); font-weight: 600; letter-spacing: .15px; }
+      .help { font-size: 12px; color: rgba(170,179,214,.85); margin-top: 6px; }
+      .error { margin-top: 6px; font-size: 12px; color: rgba(255,107,107,.95); }
+      .form-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-bottom: 10px; }
+      .form-title { margin:0; }
+      .form-subtitle { margin: 6px 0 0; }
+      .nav form { margin: 0; }
+      @media (max-width: 800px) { .col-6 { grid-column: span 12; } .wrap { padding: 18px; } }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <div class="brand">Hospital Scheduler</div>
+        <div class="nav">
+          <a class="btn" href="{% url 'dashboard' %}">Главная</a>
+          <a class="btn" href="{% url 'my_appointments' %}">Записи</a>
+          <a class="btn" href="{% url 'room_monitor' %}">Кабинеты</a>
+          <a class="btn" href="{% url 'reports_home' %}">Отчёты</a>
+          {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button class="btn" type="submit">Выйти</button>
+            </form>
+          {% else %}
+            <a class="btn" href="{% url 'login' %}">Войти</a>
+          {% endif %}
+        </div>
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
+

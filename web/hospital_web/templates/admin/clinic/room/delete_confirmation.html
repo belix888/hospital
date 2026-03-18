@@ -1,0 +1,40 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block content %}
+  <div class="module" style="margin-bottom:14px;">
+    <h2>{{ title }}</h2>
+    <div style="padding:12px 14px;">
+      <p>Вы собираетесь удалить (архивировать) кабинет: <strong>{{ object }}</strong></p>
+      <p class="help">Кабинет будет скрыт из выбора и мониторинга. История записей сохранится.</p>
+
+      {% if needs_extra_confirm %}
+        <div style="margin-top:12px; padding:12px 12px; border:1px solid rgba(255,255,255,.12); border-radius:14px; background: rgba(0,0,0,.18);">
+          <strong>Требуется дополнительное подтверждение</strong>
+          <div class="help" style="margin-top:6px;">
+            Последняя запись в этом кабинете: <strong>{% if last_appointment_at %}{{ last_appointment_at|date:"Y-m-d H:i" }}{% else %}—{% endif %}</strong>.
+            Так как это менее месяца назад — подтвердите удаление.
+          </div>
+          {% if extra_confirm_error %}
+            <div class="error" style="margin-top:10px;"><strong>{{ extra_confirm_error }}</strong></div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <form method="post" style="margin-top:14px;">
+        {% csrf_token %}
+        {% if needs_extra_confirm %}
+          <label style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+            <input type="checkbox" name="extra_confirm" value="1">
+            <span>Я понимаю последствия и подтверждаю удаление кабинета</span>
+          </label>
+        {% endif %}
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="submit" class="btn">Удалить кабинет</button>
+          <a class="btn secondary" href="{% url 'admin:clinic_room_change' object.id %}">Отмена</a>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
