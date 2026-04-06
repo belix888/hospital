@@ -4,6 +4,11 @@
       "PYTHON_VERSION": "3.11"
     }
   },
-  "buildCommand": "pip install -r requirements.txt && python hospital_web/manage.py migrate",
-  "installCommand": "pip install -r requirements.txt"
+  "buildCommand": "pip install -r requirements.txt && python manage.py migrate",
+  "installCommand": "pip install -r requirements.txt",
+  "functions": {
+    "api/wsgi.py": {
+      "maxDuration": 60
+    }
+  }
 }
