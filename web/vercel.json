@@ -2,15 +2,8 @@
   "build": {
     "env": {
       "PYTHON_VERSION": "3.11"
-    },
-    "command": "pip install -r requirements.txt && python hospital_web/manage.py migrate"
-  },
-  "installCommand": "pip install -r requirements.txt",
-  "framework": null,
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/api/wsgi.py"
     }
-  ]
+  },
+  "buildCommand": "pip install -r requirements.txt && python hospital_web/manage.py migrate",
+  "installCommand": "pip install -r requirements.txt"
 }
