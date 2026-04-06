@@ -5,5 +5,15 @@
     }
   },
   "buildCommand": "pip install -r requirements.txt && python manage.py migrate",
-  "installCommand": "pip install -r requirements.txt"
+  "installCommand": "pip install -r requirements.txt",
+  "routes": [
+    {
+      "src": "/api/test/(.*)",
+      "dest": "/api/test.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/wsgi.py"
+    }
+  ]
 }
