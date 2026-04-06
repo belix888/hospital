@@ -6,9 +6,10 @@
   },
   "buildCommand": "pip install -r requirements.txt && python manage.py migrate",
   "installCommand": "pip install -r requirements.txt",
-  "functions": {
-    "api/wsgi.py": {
-      "maxDuration": 60
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/wsgi.py"
     }
-  }
+  ]
 }
