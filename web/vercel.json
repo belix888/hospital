@@ -1,7 +1,8 @@
 {
   "build": {
     "env": {
-      "PYTHON_VERSION": "3.11"
+      "PYTHON_VERSION": "3.11",
+      "PYTHONPATH": "/var/task"
     }
   },
   "buildCommand": "pip install -r requirements.txt && python hospital_web/manage.py migrate",
