@@ -1,4 +1,13 @@
 {
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.11"
+    }
+  },
+  "framework": null,
+  "buildCommand": "pip install -r requirements.txt && python hospital_web/manage.py migrate",
+  "installCommand": "pip install -r requirements.txt",
+  "outputDirectory": null,
   "routes": [
     {
       "src": "/(.*)",
@@ -6,4 +15,3 @@
     }
   ]
 }
-
